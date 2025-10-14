@@ -1,6 +1,7 @@
 package me.nyarikori.bukkit.injector;
 
 import dev.rollczi.litecommands.LiteCommandsBuilder;
+import dev.rollczi.litecommands.argument.resolver.ArgumentResolverBase;
 import dev.rollczi.litecommands.bukkit.LiteBukkitFactory;
 import dev.rollczi.litecommands.bukkit.LiteBukkitMessages;
 import dev.rollczi.litecommands.bukkit.LiteBukkitSettings;
@@ -10,6 +11,7 @@ import lombok.experimental.UtilityClass;
 import me.nyarikori.bukkit.annotation.command.NCommand;
 import me.nyarikori.bukkit.annotation.command.CommandType;
 import me.nyarikori.bukkit.annotation.command.litecommands.LiteCommandsLocale;
+import me.nyarikori.bukkit.annotation.command.litecommands.NArgument;
 import me.nyarikori.commons.container.DependencyContainer;
 import me.nyarikori.commons.injector.InjectorInitializer;
 import me.nyarikori.commons.provider.DependencyProvider;
@@ -64,6 +66,10 @@ public final class BukkitInjectorInitializer extends JavaPlugin {
             }
         });
 
+        if (liteCommandsArray.isEmpty()) {
+            return;
+        }
+
         LiteCommandsBuilder<CommandSender, LiteBukkitSettings, ?> builder =
                 LiteBukkitFactory.builder(plugin.getName(), plugin).commands(liteCommandsArray.toArray());
 
@@ -79,6 +85,19 @@ public final class BukkitInjectorInitializer extends JavaPlugin {
             builder.message(LiteBukkitMessages.INVALID_NUMBER, liteCommandsLocale.getInvalidNumber());
             builder.message(LiteBukkitMessages.INSTANT_INVALID_FORMAT, liteCommandsLocale.getInstantInvalidFormat());
         }
+
+        Set<Class<?>> liteCommandsArgumentClassesSet = reflections.getTypesAnnotatedWith(NArgument.class);
+
+        liteCommandsArgumentClassesSet.forEach(clazz -> {
+            if (!DependencyContainer.isDependencyRegistered(clazz)) {
+                return;
+            }
+
+            NArgument argumentAnnotation = clazz.getAnnotation(NArgument.class);
+            assert argumentAnnotation != null;
+
+            builder.argument(argumentAnnotation.argument(), (ArgumentResolverBase) DependencyContainer.getDependency(clazz));
+        });
 
         builder.build();
     }
