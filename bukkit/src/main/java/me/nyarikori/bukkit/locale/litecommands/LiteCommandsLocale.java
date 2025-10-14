@@ -1,4 +1,4 @@
-package me.nyarikori.bukkit.annotation.command.litecommands;
+package me.nyarikori.bukkit.locale.litecommands;
 
 import dev.rollczi.litecommands.bukkit.LiteBukkitMessages;
 import lombok.Builder;
