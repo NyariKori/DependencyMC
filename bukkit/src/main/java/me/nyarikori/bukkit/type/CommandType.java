@@ -1,4 +1,4 @@
-package me.nyarikori.bukkit.annotation.command;
+package me.nyarikori.bukkit.type;
 
 /**
  * @author NyariKori
