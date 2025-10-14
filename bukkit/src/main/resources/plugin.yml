@@ -1,7 +1,0 @@
-name: bukkit
-version: '1.0'
-main: me.nyarikori.bukkit.injector.BukkitInjectorInitializer
-api-version: '1.20'
-load: STARTUP
-authors: [NyariKori]
-website: https://github.com/NyariKori
