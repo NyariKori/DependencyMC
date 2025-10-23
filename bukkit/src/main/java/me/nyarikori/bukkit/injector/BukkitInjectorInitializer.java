@@ -9,12 +9,13 @@ import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 import me.nyarikori.bukkit.annotation.command.NCommand;
-import me.nyarikori.bukkit.type.command.CommandType;
+import me.nyarikori.bukkit.annotation.command.CommandType;
 import me.nyarikori.bukkit.locale.litecommands.LiteCommandsLocale;
 import me.nyarikori.bukkit.annotation.command.litecommands.NArgument;
 import me.nyarikori.commons.container.DependencyContainer;
 import me.nyarikori.commons.injector.InjectorInitializer;
 import me.nyarikori.commons.provider.DependencyProvider;
+import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
@@ -62,7 +63,8 @@ public final class BukkitInjectorInitializer extends JavaPlugin {
             if (commandAnnotation.commandType() == CommandType.LITE_COMMANDS) {
                 liteCommandsArray.add(DependencyContainer.getDependency(clazz));
             } else {
-                // TODO: Логика обычных команд
+                String commandName = commandAnnotation.commandName();
+                plugin.getCommand(commandName).setExecutor((CommandExecutor) DependencyContainer.getDependency(clazz));
             }
         });
 

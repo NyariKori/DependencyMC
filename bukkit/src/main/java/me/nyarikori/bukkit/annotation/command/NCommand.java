@@ -1,7 +1,5 @@
 package me.nyarikori.bukkit.annotation.command;
 
-import me.nyarikori.bukkit.type.command.CommandType;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -14,4 +12,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface NCommand {
     CommandType commandType();
+
+    String commandName() default "";
 }
