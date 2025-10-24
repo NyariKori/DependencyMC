@@ -12,6 +12,7 @@
     <modules>
         <module>commons</module>
         <module>bukkit</module>
+        <module>velocity</module>
     </modules>
 
     <properties>

@@ -1,4 +1,4 @@
-package me.nyarikori.bukkit.annotation.command.litecommands;
+package me.nyarikori.commons.annotation.command.litecommands;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

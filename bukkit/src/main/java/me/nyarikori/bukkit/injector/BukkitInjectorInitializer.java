@@ -8,10 +8,10 @@ import dev.rollczi.litecommands.bukkit.LiteBukkitSettings;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
-import me.nyarikori.bukkit.annotation.command.NCommand;
-import me.nyarikori.bukkit.annotation.command.CommandType;
 import me.nyarikori.bukkit.locale.litecommands.LiteCommandsLocale;
-import me.nyarikori.bukkit.annotation.command.litecommands.NArgument;
+import me.nyarikori.commons.annotation.command.CommandType;
+import me.nyarikori.commons.annotation.command.NCommand;
+import me.nyarikori.commons.annotation.command.litecommands.NArgument;
 import me.nyarikori.commons.container.DependencyContainer;
 import me.nyarikori.commons.injector.InjectorInitializer;
 import me.nyarikori.commons.provider.DependencyProvider;
@@ -32,7 +32,7 @@ import java.util.Set;
  * @author NyariKori
  */
 @UtilityClass
-public final class BukkitInjectorInitializer extends JavaPlugin {
+public final class BukkitInjectorInitializer {
     @Setter
     private LiteCommandsLocale liteCommandsLocale;
 
