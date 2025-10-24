@@ -14,4 +14,6 @@ public @interface NCommand {
     CommandType commandType();
 
     String commandName() default "";
+
+    String[] aliases() default {};
 }
