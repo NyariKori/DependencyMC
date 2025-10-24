@@ -5,5 +5,5 @@ package me.nyarikori.commons.annotation.command;
  */
 public enum CommandType {
     LITE_COMMANDS,
-    BUKKIT_COMMANDS
+    BASE_COMMANDS
 }

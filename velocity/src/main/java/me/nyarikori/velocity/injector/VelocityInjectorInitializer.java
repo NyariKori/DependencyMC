@@ -1,23 +1,25 @@
-package me.nyarikori.bukkit.injector;
+package me.nyarikori.velocity.injector;
 
+import com.velocitypowered.api.command.Command;
+import com.velocitypowered.api.command.CommandManager;
+import com.velocitypowered.api.command.CommandMeta;
+import com.velocitypowered.api.command.CommandSource;
+import com.velocitypowered.api.proxy.ProxyServer;
 import dev.rollczi.litecommands.LiteCommandsBuilder;
 import dev.rollczi.litecommands.argument.resolver.ArgumentResolverBase;
-import dev.rollczi.litecommands.bukkit.LiteBukkitFactory;
-import dev.rollczi.litecommands.bukkit.LiteBukkitMessages;
-import dev.rollczi.litecommands.bukkit.LiteBukkitSettings;
+import dev.rollczi.litecommands.velocity.LiteVelocityFactory;
+import dev.rollczi.litecommands.velocity.LiteVelocityMessages;
+import dev.rollczi.litecommands.velocity.LiteVelocitySettings;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
-import me.nyarikori.bukkit.locale.litecommands.LiteCommandsLocale;
 import me.nyarikori.commons.annotation.command.CommandType;
 import me.nyarikori.commons.annotation.command.NCommand;
 import me.nyarikori.commons.annotation.command.litecommands.NArgument;
 import me.nyarikori.commons.container.DependencyContainer;
 import me.nyarikori.commons.injector.InjectorInitializer;
 import me.nyarikori.commons.provider.DependencyProvider;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.plugin.java.JavaPlugin;
+import me.nyarikori.velocity.locale.litecommands.LiteCommandsLocale;
 import org.jetbrains.annotations.NotNull;
 import org.reflections.Reflections;
 import org.reflections.scanners.Scanners;
@@ -32,7 +34,7 @@ import java.util.Set;
  * @author NyariKori
  */
 @UtilityClass
-public final class BukkitInjectorInitializer {
+public class VelocityInjectorInitializer {
     @Setter
     private LiteCommandsLocale liteCommandsLocale;
 
@@ -42,7 +44,7 @@ public final class BukkitInjectorInitializer {
 
     @SneakyThrows
     @SuppressWarnings("all")
-    public void init(@NotNull JavaPlugin plugin, @NotNull String basePackage) {
+    public void init(@NotNull ProxyServer proxy, @NotNull Object plugin, @NotNull String basePackage) {
         InjectorInitializer.init(basePackage);
 
         Reflections reflections = new Reflections(new ConfigurationBuilder()
@@ -65,7 +67,12 @@ public final class BukkitInjectorInitializer {
                 liteCommandsArray.add(instance);
             } else {
                 String commandName = commandAnnotation.commandName();
-                plugin.getCommand(commandName).setExecutor((CommandExecutor) instance);
+                CommandManager commandManager = proxy.getCommandManager();
+                CommandMeta commandMeta = commandManager.metaBuilder(commandName)
+                        .aliases(commandAnnotation.aliases())
+                        .plugin(plugin)
+                        .build();
+                commandManager.register(commandMeta, (Command) instance);
             }
         });
 
@@ -73,20 +80,20 @@ public final class BukkitInjectorInitializer {
             return;
         }
 
-        LiteCommandsBuilder<CommandSender, LiteBukkitSettings, ?> builder =
-                LiteBukkitFactory.builder(plugin.getName(), plugin).commands(liteCommandsArray.toArray());
+        LiteCommandsBuilder<CommandSource, LiteVelocitySettings, ?> builder =
+                LiteVelocityFactory.builder(proxy).commands(liteCommandsArray.toArray());
 
         if (liteCommandsLocale != null) {
-            builder.message(LiteBukkitMessages.INVALID_USAGE, liteCommandsLocale.getInvalidUsage());
-            builder.message(LiteBukkitMessages.PLAYER_ONLY, liteCommandsLocale.getPlayerOnly());
-            builder.message(LiteBukkitMessages.PLAYER_NOT_FOUND, liteCommandsLocale.getPlayerNotFound());
-            builder.message(LiteBukkitMessages.MISSING_PERMISSIONS, liteCommandsLocale.getMissingPermissions());
-            builder.message(LiteBukkitMessages.WORLD_NOT_EXIST, liteCommandsLocale.getWorldNotExist());
-            builder.message(LiteBukkitMessages.WORLD_PLAYER_ONLY, liteCommandsLocale.getWorldPlayerOnly());
-            builder.message(LiteBukkitMessages.UUID_INVALID_FORMAT, liteCommandsLocale.getUuidInvalidFormat());
-            builder.message(LiteBukkitMessages.LOCATION_INVALID_FORMAT, liteCommandsLocale.getLocationInvalidFormat());
-            builder.message(LiteBukkitMessages.INVALID_NUMBER, liteCommandsLocale.getInvalidNumber());
-            builder.message(LiteBukkitMessages.INSTANT_INVALID_FORMAT, liteCommandsLocale.getInstantInvalidFormat());
+            builder.message(LiteVelocityMessages.INVALID_USAGE, liteCommandsLocale.getInvalidUsage());
+            builder.message(LiteVelocityMessages.PLAYER_ONLY, liteCommandsLocale.getPlayerOnly());
+            builder.message(LiteVelocityMessages.PLAYER_NOT_FOUND, liteCommandsLocale.getPlayerNotFound());
+            builder.message(LiteVelocityMessages.MISSING_PERMISSIONS, liteCommandsLocale.getMissingPermissions());
+            builder.message(LiteVelocityMessages.UUID_INVALID_FORMAT, liteCommandsLocale.getUuidInvalidFormat());
+            builder.message(LiteVelocityMessages.INVALID_NUMBER, liteCommandsLocale.getInvalidNumber());
+            builder.message(LiteVelocityMessages.INSTANT_INVALID_FORMAT, liteCommandsLocale.getInstantInvalidFormat());
+            builder.message(LiteVelocityMessages.SERVER_NOT_FOUND, liteCommandsLocale.getServerNotFound());
+            builder.message(LiteVelocityMessages.NOT_CONNECTED_TO_ANY_SERVER, liteCommandsLocale.getNotConnectedToAnyServer());
+            builder.message(LiteVelocityMessages.COMMAND_COOLDOWN, liteCommandsLocale.getCommandCooldown());
         }
 
         Set<Class<?>> liteCommandsArgumentClassesSet = reflections.getTypesAnnotatedWith(NArgument.class);
