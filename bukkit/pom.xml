@@ -6,11 +6,11 @@
 
   <parent>
     <groupId>me.nyarikori</groupId>
-    <artifactId>SimpleDI</artifactId>
+    <artifactId>DependencyMC</artifactId>
     <version>1.0</version>
   </parent>
 
-  <artifactId>bukkit</artifactId>
+  <artifactId>DependencyMC-bukkit</artifactId>
   <version>1.0</version>
   <packaging>jar</packaging>
 
@@ -22,7 +22,7 @@
   </properties>
 
   <build>
-    <finalName>SimpleDIPlugin</finalName>
+    <finalName>DependencyMC</finalName>
     <defaultGoal>clean package</defaultGoal>
     <plugins>
       <plugin>
