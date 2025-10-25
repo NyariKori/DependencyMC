@@ -2,9 +2,9 @@
 #### A simple dependency injection system for working with Bukkit, Velocity. Supports LiteCommands.
 
 ### Modules: 
-- ⛏️ Bukkit: (everything you need to work with DI in the Bukkit environment)
+- ⛏️ Bukkit: everything you need to work with DI in the Bukkit environment
 - 🧠 Commons: the main DI brain, where everything used by Bukkit and Velocity modules is stored
-- 🌐 Velocity: (everything you need to work with DI in the Velocity environment)
+- 🌐 Velocity: everything you need to work with DI in the Velocity environment
 
 ### importing to Maven:
 TODO...
