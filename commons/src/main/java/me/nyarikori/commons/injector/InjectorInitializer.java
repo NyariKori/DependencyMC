@@ -30,8 +30,6 @@ public class InjectorInitializer {
 
     @SneakyThrows
     public void init(@NotNull String basePackage) {
-        provider.register();
-
         Reflections reflections = new Reflections(new ConfigurationBuilder()
                         .setUrls(ClasspathHelper.forPackage(basePackage))
                         .setScanners(Scanners.TypesAnnotated));

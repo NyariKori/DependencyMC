@@ -184,7 +184,7 @@
     </dependency>
     <dependency>
       <groupId>me.nyarikori</groupId>
-      <artifactId>commons</artifactId>
+      <artifactId>DependencyMC-commons</artifactId>
       <version>1.0</version>
     </dependency>
     <dependency>
